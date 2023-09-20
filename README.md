@@ -1,0 +1,2 @@
+# ai_practical_research_project
+AI실전연구프로젝트
