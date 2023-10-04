@@ -29,7 +29,13 @@ def main():
     for i in range(0, num):
         n = random.randint(args.label[0], args.label[-1])
         y_anon_list.append(n)
-    y_anon = pd.Series(data=y_anon_list)
+
+    y_anon_df = pd.DataFrame({"Label":y_anon_list})
+    y_anon_df.to_csv("log/y_anon.csv", index = False)
+    y_anon_df.to_excel("log/y_anon.xlsx", index = False)
+    y_anon = y_anon_df["Label"]
+    y_test.to_csv("log/y_test.csv", index = False)
+    y_test.to_excel("log/y_test.xlsx", index = False)    
 
     def evaluate(y_test, y_anon):
         sum = 0

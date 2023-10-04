@@ -1,5 +1,6 @@
 import pickle
 import argparse
+import warnings
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
@@ -7,10 +8,12 @@ from sklearn.metrics import classification_report
 
 
 def main():
+
+    warnings.filterwarnings( 'ignore')
     
     parer = argparse.ArgumentParser()
     parer.add_argument('--test_dataset', type=str, default='data/t10k.csv')
-    parer.add_argument('--load_model_path', type=str, default='data/mnist_model.sav')
+    parer.add_argument('--load_model_path', type=str, default='model/mnist_model.sav')
     parer.add_argument('--log_path', type=str, default='log/inference_log.xlsx')
     parer.add_argument('--label', type=list, default=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     args = parer.parse_args('')   
@@ -23,14 +26,26 @@ def main():
     test_x = (x_test.values) / 255
     test_y = y_test.values.flatten() 
 
-    x_test, x_dev, y_test, y_dev = train_test_split(test_x, test_y, random_state=42)
-
     loaded_model = pickle.load(open(args.load_model_path, 'rb'))
+    # loaded_model = loaded_model.fit(x_test, y_test)
 
-    y_test= pd.DataFrame({"Label": X_test['label']})
-    y_test['Prediction'] = loaded_model.predict(test_y)
+    y_test = pd.DataFrame({"Label": X_test['label']})
+
+    y_test['Prediction'] = loaded_model.predict(test_x)
     y_test['Result'] = y_test.apply(lambda row: row['Prediction']==row['Label'], axis=1)
     y_test.to_excel(args.log_path, index=False)
+
+    real_result_json_path = "log/real_result.json"
+    predict_result_json_path = "log/predict_result.json"
+
+    y_test = y_test.reset_index(drop = False) 
+    y_test_df = y_test['Label']
+    y_test_df.columns = ['ID','Class']
+    y_pred_df = y_test['Prediction']
+    y_pred_df.columns = ['ID','Class']
+
+    y_test_df.to_json(real_result_json_path, orient = 'split', indent = 4, index=False)
+    y_pred_df.to_json(predict_result_json_path, orient = 'split', indent = 4, index=False)
 
     def evaluate(y_result):
         sum = 0

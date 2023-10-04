@@ -1,5 +1,6 @@
 import pickle
 import argparse
+import warnings
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
@@ -7,7 +8,9 @@ from sklearn.metrics import classification_report
 
 
 def main():
-    
+
+    warnings.filterwarnings( 'ignore' )
+
     parer = argparse.ArgumentParser()
     parer.add_argument('--train_dataset', type=str, default='data/train.csv')
     parer.add_argument('--save_model_path', type=str, default='data/mnist_model.sav')

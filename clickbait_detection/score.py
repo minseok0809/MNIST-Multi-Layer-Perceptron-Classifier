@@ -7,7 +7,7 @@ import pandas as pd
 def main():
     
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset_folder', type=str, default='./data/aihub_clickbait/dataset/')
+    parser.add_argument('--dataset_folder', type=str, default='./data/aihub_clickbait_detection/dataset/')
     parser.add_argument('--label', type=list, default=[0, 1])
     args = parser.parse_args('')   
 
@@ -18,6 +18,11 @@ def main():
 
         test_xlsx_path = dataset_folder + "test_dataset.xlsx"
         test_xlsx = pd.read_excel(test_xlsx_path, engine='openpyxl')
+        
+        y_test_xlsx_path = dataset_folder + "y_test.xlsx"
+        y_test_csv_path = dataset_folder + "y_test.csv"
+        test_xlsx['Label'].to_excel(y_test_xlsx_path, index=False)
+        test_xlsx['Label'].to_csv(y_test_csv_path, index=False)
 
         texts = test_xlsx['Text']
         labels = test_xlsx['Label']
@@ -48,9 +53,11 @@ def main():
         print('Accuracy: {:3.2f} %'.format(accuracy*100))
 
         y_anon_xlsx = pd.DataFrame({'Label': y_anon})
-        y_anon_xlsx_path = dataset_folder + "test_dataset.xlsx"
+        y_anon_xlsx_path = dataset_folder + "y_anon.xlsx"
+        y_anon_csv_path = dataset_folder + "y_anon.csv"
         y_anon_xlsx.to_excel(y_anon_xlsx_path, index=False)
-    
+        y_anon_xlsx.to_csv(y_anon_csv_path, index=False)
+            
     test_dataset = write_xlsxtext_to_test_list(args.dataset_folder)
     random_baseline(test_dataset, args.label, args.dataset_folder)
 

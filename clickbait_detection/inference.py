@@ -17,11 +17,11 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', type=str, default='klue/roberta-base')
-    parser.add_argument('--data_path', type=str, default='./data/aihub_clickbait/dataset/')
+    parser.add_argument('--data_path', type=str, default='./data/aihub_clickbait_detection/dataset/')
     parser.add_argument('--test_dataset', type=str, default='test_dataset.xlsx')
     parser.add_argument('--load_model_path', type=str, default='./model')
-    parser.add_argument('--log_path', type=str, default='./log/clickabait_detection_evaluation_log.df')
-    parser.add_argument('--inference_log_path', type=str, default='./log/clickabait_detection_inference_log.df')
+    parser.add_argument('--log_path', type=str, default='./log/clickabait_detection_evaluation_log.xlsx')
+    parser.add_argument('--inference_log_path', type=str, default='./log/clickabait_detection_inference_log.xlsx')
     parser.add_argument('--epoch', type=int, default=10)
     parser.add_argument('--batch_size', type=int, default=64)
     args = parser.parse_args()   
@@ -104,6 +104,25 @@ def main():
         inference_log_df['Prediction'] = prediction
         inference_log_df.to_excel(args.inference_log_path, index=False)
         
+        y_pred_xlsx_path = args.inference_log_path
+        y_pred_xlsx_split = y_pred_xlsx_path.split("/")
+        
+        json_path = ""
+        for i in y_pred_xlsx_split:
+            if i != '.' and 'clickabait' not in i:
+                json_path += (i + "/")
+        
+        real_result_json_path = json_path + "real_result.json"
+        predict_result_json_path = json_path + "predict_result.json"
+
+        y_test_df = inference_log_df[['index','Label']]      
+        y_test_df.columns = ['ID','Class']
+        y_pred_df = inference_log_df[['index','Prediction']]
+        y_pred_df.columns = ['ID','Class']
+
+        y_test_df.to_json(real_result_json_path, orient = 'split', indent = 4, index=False)
+        y_pred_df.to_json(predict_result_json_path, orient = 'split', indent = 4, index=False)
+
         if len(elapsed_str) == 5:
             elapsed_str = "00:" + elapsed_str
         elapsed_str = str(datetime.datetime.strptime(elapsed_str, '%H:%M:%S').time())    
@@ -113,6 +132,7 @@ def main():
         accuracy = round((correct.float() / total).item(), 4)
         test_accuracy.append(accuracy)
         print("Test Time",  elapsed_str, "  ", "Test Accuracy:", accuracy)  
+
 
     model_log_df = pd.DataFrame({'Test Time':test_time, 
                                             'Test Accuracy':test_accuracy})    

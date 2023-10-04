@@ -1,6 +1,8 @@
 import cv2
 import glob
 import pickle
+import warnings
+import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,13 +11,15 @@ from scipy.ndimage import interpolation
 
 def main():
 
-    parer = argparse.ArgumentParser()
-    parer.add_argument('--load_model_path', type=str, default='model/mnist_model.sav')
-    parer.add_argument('--image_path', type=str, default='./diy/original/')
-    parer.add_argument('--save_plot_path', type=str, default='./diy/plot/')
-    parer.add_argument('--log_path', type=str, default='log/diy_inference_log.xlsx')
-    parer.add_argument('--label', type=list, default=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    args = parer.parse_args('')       
+    warnings.filterwarnings( 'ignore')
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--load_model_path', type=str, default='model/mnist_model.sav')
+    parser.add_argument('--image_path', type=str, default='./diy/original/')
+    parser.add_argument('--save_plot_path', type=str, default='./diy/plot/diy_inference.png')
+    parser.add_argument('--log_path', type=str, default='log/diy_inference_log.xlsx')
+    parser.add_argument('--label', type=list, default=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    args = parser.parse_args('')       
 
     load_model_path = args.load_model_path
     
@@ -54,7 +58,7 @@ def main():
             plt.title(f'prediction: {prediction}')
             plt.axis('off')
         plt.savefig(args.save_plot_path, facecolor='#eeeeee', edgecolor='black', format='png', bbox_inches='tight')
-        plt.show()
+        # plt.show()
         num_samples = len(img_paths)
         accuracy = sum / len(img_paths)
 
@@ -67,9 +71,10 @@ def main():
     loaded_model
 
     num_samples, accuracy = diy_mnist_image_inference(loaded_model)
-    print("\n")
+    # print("\n")
     print('The number of samples: {}'.format(num_samples))
     print('Accuracy: {:3.2f} %'.format(accuracy*100))
-
+    print("\n")
+    
 if __name__ == '__main__':
     main() 

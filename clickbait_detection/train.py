@@ -16,11 +16,11 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', type=str, default='klue/roberta-base')
-    parser.add_argument('--data_path', type=str, default='./data/aihub_clickbait/dataset/')
+    parser.add_argument('--data_path', type=str, default='./data/aihub_clickbait_detection/dataset/')
     parser.add_argument('--train_dataset', type=str, default='train_dataset.xlsx')
     parser.add_argument('--valid_dataset', type=str, default='valid_dataset.xlsx')
     parser.add_argument('--save_model_path', type=str, default='./model')
-    parser.add_argument('--log_path', type=str, default='./log/clickabait_detection_training_log.df')
+    parser.add_argument('--log_path', type=str, default='./log/clickabait_detection_training_log.xlsx')
     parser.add_argument('--epoch', type=int, default=10)
     parser.add_argument('--batch_size', type=int, default=128)
     args = parser.parse_args()   

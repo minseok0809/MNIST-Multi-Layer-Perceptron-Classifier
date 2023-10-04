@@ -17,8 +17,8 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', type=str, default='klue/roberta-base')
-    parser.add_argument('--news_article_text_folder', type=str, default='./data/aihub_clickbait/news_article/')
-    parser.add_argument('--data_path', type=str, default='./data/aihub_clickbait/dataset/')
+    parser.add_argument('--news_article_text_folder', type=str, default='./data/aihub_clickbait_detection/news_article/')
+    parser.add_argument('--data_path', type=str, default='./data/aihub_clickbait_detection/dataset/')
     parser.add_argument('--dataset', type=str, default='dataset.xlsx')
     parser.add_argument('--label', '--names-list', nargs='+', default=[])
     parser.add_argument('--load_model_path', type=str, default='./model')
