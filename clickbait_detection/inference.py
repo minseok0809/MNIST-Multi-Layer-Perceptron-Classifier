@@ -111,7 +111,12 @@ def main():
         for i in y_pred_xlsx_split:
             if i != '.' and 'clickabait' not in i:
                 json_path += (i + "/")
-        
+
+        y_true_csv_path = json_path + "y_true.csv"
+        y_pred_csv_path = json_path + "y_pred.csv"
+        y_true_xlsx_path = json_path + "y_true.xlsx"
+        y_pred_xlsx_path = json_path + "y_pred.xlsx"
+
         real_result_json_path = json_path + "real_result.json"
         predict_result_json_path = json_path + "predict_result.json"
 
@@ -119,6 +124,12 @@ def main():
         y_test_df.columns = ['ID','Class']
         y_pred_df = inference_log_df[['index','Prediction']]
         y_pred_df.columns = ['ID','Class']
+
+        # y_test_df.to_csv(y_true_csv_path, index=False)
+        # y_pred_df.to_csv(y_pred_csv_path, index=False)
+
+        # y_test_df.to_xlsx(y_true_xlsx_path, index=False)
+        # y_pred_df.to_xlsx(y_pred_xlsx_path, index=False)
 
         y_test_df.to_json(real_result_json_path, orient = 'split', indent = 4, index=False)
         y_pred_df.to_json(predict_result_json_path, orient = 'split', indent = 4, index=False)

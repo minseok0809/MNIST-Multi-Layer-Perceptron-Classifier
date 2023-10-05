@@ -24,28 +24,28 @@ def main():
     train_y = y_train.values.flatten() 
 
     num = len(y_test)
-    y_anon_list = []
+    y_rand_list = []
 
     for i in range(0, num):
         n = random.randint(args.label[0], args.label[-1])
-        y_anon_list.append(n)
+        y_rand_list.append(n)
 
-    y_anon_df = pd.DataFrame({"Label":y_anon_list})
-    y_anon_df.to_csv("log/y_anon.csv", index = False)
-    y_anon_df.to_excel("log/y_anon.xlsx", index = False)
-    y_anon = y_anon_df["Label"]
+    y_rand_df = pd.DataFrame({"Label":y_rand_list})
+    y_rand_df.to_csv("log/y_rand.csv", index = False)
+    # y_rand_df.to_excel("log/y_rand.xlsx", index = False)
+    y_rand = y_rand_df["Label"]
     y_test.to_csv("log/y_test.csv", index = False)
-    y_test.to_excel("log/y_test.xlsx", index = False)    
+    # y_test.to_excel("log/y_test.xlsx", index = False)   
 
-    def evaluate(y_test, y_anon):
+    def evaluate(y_test, y_rand):
         sum = 0
-        for i, j in zip(y_test, y_anon):
+        for i, j in zip(y_test, y_rand):
             if i == j:
                 sum += 1
         accuracy = sum / len(y_test)
-        return accuracy
+        return accuracy 
     
-    accuracy = evaluate(y_test, y_anon)
+    accuracy = evaluate(y_test, y_rand)
     print('Accuracy: {:3.2f} %'.format(accuracy*100))
 
 if __name__ == '__main__':

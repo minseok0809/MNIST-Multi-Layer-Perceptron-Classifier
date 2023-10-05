@@ -26,7 +26,7 @@ def main():
     def diy_mnist_image_inference(loaded_model):
         
         img_paths = glob.glob(args.image_path + "*.png")
-        sum = 0
+        correction = 0
 
         labels = []
         predictions = []
@@ -52,7 +52,7 @@ def main():
             results.append(result)
 
             if prediction == idx:
-                sum += 1
+                correction += 1
             
             plt.imshow(img_resized, cmap='gray')
             plt.title(f'prediction: {prediction}')
@@ -60,7 +60,7 @@ def main():
         plt.savefig(args.save_plot_path, facecolor='#eeeeee', edgecolor='black', format='png', bbox_inches='tight')
         # plt.show()
         num_samples = len(img_paths)
-        accuracy = sum / len(img_paths)
+        accuracy = correction / len(img_paths)
 
         log_df = pd.DataFrame({"Label":labels, "Prediction":predictions, "Result":results})
         log_df.to_excel(args.log_path, index=False)

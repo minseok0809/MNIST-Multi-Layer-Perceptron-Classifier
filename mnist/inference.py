@@ -27,7 +27,6 @@ def main():
     test_y = y_test.values.flatten() 
 
     loaded_model = pickle.load(open(args.load_model_path, 'rb'))
-    # loaded_model = loaded_model.fit(x_test, y_test)
 
     y_test = pd.DataFrame({"Label": X_test['label']})
 
@@ -35,6 +34,10 @@ def main():
     y_test['Result'] = y_test.apply(lambda row: row['Prediction']==row['Label'], axis=1)
     y_test.to_excel(args.log_path, index=False)
 
+    y_true_csv_path = "log/y_true.csv"
+    y_pred_csv_path = "log/y_pred.csv"
+    y_true_xlsx_path = "log/y_true.xlsx"
+    y_pred_xlsx_path = "log/y_pred.xlsx"
     real_result_json_path = "log/real_result.json"
     predict_result_json_path = "log/predict_result.json"
 
@@ -43,6 +46,12 @@ def main():
     y_test_df.columns = ['ID','Class']
     y_pred_df = y_test['Prediction']
     y_pred_df.columns = ['ID','Class']
+
+    # y_test_df.to_csv(y_true_csv_path, index=False)
+    # y_pred_df.to_csv(y_pred_csv_path, index=False)
+
+    # y_test_df.to_excel(y_true_xlsx_path, index=False)
+    # y_pred_df.to_excel(y_pred_xlsx_path, index=False)
 
     y_test_df.to_json(real_result_json_path, orient = 'split', indent = 4, index=False)
     y_pred_df.to_json(predict_result_json_path, orient = 'split', indent = 4, index=False)

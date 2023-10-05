@@ -1,4 +1,3 @@
-
 import glob
 import random
 import argparse
@@ -32,9 +31,9 @@ def main():
 
         return test_list
 
-    def evaluate(y_test, y_anon):
+    def evaluate(y_test, y_rand):
         sum = 0
-        for i, j in zip(y_test, y_anon):
+        for i, j in zip(y_test, y_rand):
             if i == j:
                 sum += 1
         accuracy = sum / len(y_test)
@@ -43,23 +42,24 @@ def main():
     def random_baseline(test_dataset, label, dataset_folder):
         y_test = [test[1] for test in test_dataset]
         num = len(y_test)
-        y_anon = []
+        y_rand = []
 
         for i in range(0, num):
             n = random.choice(label)
-            y_anon.append(n)
+            y_rand.append(n)
 
-        accuracy = evaluate(y_test, y_anon)
-        print('Accuracy: {:3.2f} %'.format(accuracy*100))
+        y_rand_xlsx = pd.DataFrame({'Label': y_rand})
+        y_rand_xlsx_path = dataset_folder + "y_rand.xlsx"
+        y_rand_csv_path = dataset_folder + "y_rand.csv"
+        # y_rand_xlsx.to_excel(y_rand_xlsx_path, index=False)
+        y_rand_xlsx.to_csv(y_rand_csv_path, index=False)
 
-        y_anon_xlsx = pd.DataFrame({'Label': y_anon})
-        y_anon_xlsx_path = dataset_folder + "y_anon.xlsx"
-        y_anon_csv_path = dataset_folder + "y_anon.csv"
-        y_anon_xlsx.to_excel(y_anon_xlsx_path, index=False)
-        y_anon_xlsx.to_csv(y_anon_csv_path, index=False)
+        return y_test, y_rand
             
     test_dataset = write_xlsxtext_to_test_list(args.dataset_folder)
-    random_baseline(test_dataset, args.label, args.dataset_folder)
+    y_test, y_rand = random_baseline(test_dataset, args.label, args.dataset_folder)
+    accuracy = evaluate(y_test, y_rand)
+    print('Accuracy: {:3.2f} %'.format(accuracy*100))
 
 if __name__ == '__main__':
     main()    
