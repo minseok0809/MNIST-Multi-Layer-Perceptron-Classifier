@@ -58,10 +58,11 @@ def main(text):
             y_pred = model(input_ids_batch.to(device), attention_mask=attention_masks_batch.to(device))[0]
             _, predicted = torch.max(y_pred, 1)
 
-            if predicted.item() == 0:
-                classfication_result = "It's Not Clickbait Article"
-            elif predicted.item() == 1:
-                classfication_result =  "It's Clickbait Article"
+            for prediction in predicted.tolist():
+                if prediction == 0:
+                    classfication_result = "It's Not Clickbait Article"
+                elif prediction == 1:
+                    classfication_result =  "It's Clickbait Article"
 
     return classfication_result
 
