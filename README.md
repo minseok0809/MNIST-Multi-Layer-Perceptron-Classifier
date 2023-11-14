@@ -14,3 +14,10 @@ Image Classification
 <br>klue/roberta_base, roberta_large
 
 <br></br>
+
+## AIFactory AIHub Task
+[AIFactory](https://aifactory.space/)
+<br>[AIHub](https://www.aihub.or.kr/)
+
+<br></br>
+
