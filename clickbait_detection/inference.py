@@ -73,6 +73,7 @@ def main():
     
     inference_log_df = pd.DataFrame({'index':inference_index,
                                      'Label':test_data['Label']})  
+    label = []
     prediction = []
     test_time = []
     test_accuracy = []
@@ -95,12 +96,18 @@ def main():
                 total += len(y_batch)
                 
                 batches += 1
-                prediction.append(predicted.item())   
+                for i in y_batch.tolist():
+                    label.append(i) 
+
+                for i in predicted.tolist():
+                    prediction.append(i)  
+   
                 # if batches % 100 == 0:
                 # print("Batch Loss:", total_loss, "Accuracy:", correct.float() / total)
             elapsed = pbar.format_dict['elapsed']
             elapsed_str = pbar.format_interval(elapsed)
 
+        inference_log_df['Label'] = label
         inference_log_df['Prediction'] = prediction
         inference_log_df.to_excel(args.inference_log_path, index=False)
         
